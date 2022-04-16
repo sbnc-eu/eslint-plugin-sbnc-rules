@@ -24,6 +24,7 @@ There are two options for this rule:
 
 * `"never"` (default) enforces zero spaces inside of parentheses
 * `"always"` enforces a space inside of parentheses
+* `"loose"` applies the `always` rule if there is at least one space or any other parentheses inside the parentheses, and applies the `never` rule otherwise.
 
 Depending on your coding conventions, you can choose either option by specifying it in your configuration:
 
@@ -98,13 +99,61 @@ var foo = ( 1 + 2 ) * 3;
 ( function () { return 'bar'; }() );
 ```
 
+
+### "loose"
+
+Examples of **incorrect** code for this rule with the `"loose"` option:
+
+```js
+/*eslint space-in-parens: ["error", "loose"]*/
+
+foo( );
+
+foo( 'bar');
+foo('bar' );
+foo( 'bar' );
+
+foo('bar', 'baz' );
+foo( 'bar', 'baz');
+foo('bar', 'baz');
+
+foo(/* bar */);
+
+var foo = (1 + 2) * 3;
+var foo = (1+(2*5)) * 3;
+var foo = (1+( 2*5 )) * 3;
+
+(function () { return 'bar'; }());
+```
+
+Examples of **correct** code for this rule with the `"loose"` option:
+
+```js
+/*eslint space-in-parens: ["error", "loose"]*/
+
+foo();
+
+foo('bar');
+
+foo( 'bar', 'baz' );
+
+foo( /* bar */ );
+
+var foo = ( 1 + 2 ) * 3;
+var foo = ( 1+(2*5) ) * 3;
+var foo = ( 1 + (2*5) ) * 3;
+var foo = ( 1 + ( 2 * 5 ) ) * 3;
+
+( function () { return 'bar'; }() );
+```
+
 ### Exceptions
 
 An object literal may be used as a third array item to specify exceptions, with the key `"exceptions"` and an array as the value. These exceptions work in the context of the first option. That is, if `"always"` is set to enforce spacing, then any "exception" will *disallow* spacing. Conversely, if `"never"` is set to disallow spacing, then any "exception" will *enforce* spacing.
 
 Note that this rule only enforces spacing within parentheses; it does not check spacing within curly or square brackets, but will enforce or disallow spacing of those brackets if and only if they are adjacent to an opening or closing parenthesis.
 
-The following exceptions are available: `["{}", "[]", "()", "empty"]`.
+The following exceptions are available: `["{}", "[]", "()", "empty", "bracket lines", "bracket sides"]`.
 
 ### Empty Exception
 
@@ -114,6 +163,14 @@ Empty parens exception and behavior:
 * `never` (default) requires `()`
 * `always` excepting `empty` requires `()`
 * `never` excepting `empty` requires `( )` (empty parens without a space is here forbidden)
+
+
+### Bracket Lines and Bracket Sides Exceptions
+
+These exceptions deal with parts of the code where a chunk of code only contains brackets.
+* `bracket lines` defines an exception to any lines that only contain brackets
+* `bracket sides` defines an exception to the opening or closing parentheses if they only contain brackets within the same line of code.
+
 
 ### Examples
 
@@ -283,12 +340,58 @@ baz( 1, [1,2]);
 foo({bar: 'baz'}, [1, 2]);
 ```
 
+
+Example of **incorrect** code for this rule with the `"always", { "exceptions": ["bracket lines"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket lines"] }]*/
+
+foo({
+  
+} );
+
+foo( {
+
+} );
+```
+
+Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket lines"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket lines"] }]*/
+
+foo( {
+
+});
+```
+
+
+Example of **incorrect** code for this rule with the `"always", { "exceptions": ["bracket sides"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket sides"] }]*/
+
+foo( {
+  
+} );
+```
+
+Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket sides"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket sides"] }]*/
+
+foo({
+
+});
+```
+
 ## When Not To Use It
 
 You can turn this rule off if you are not concerned with the consistency of spacing between parentheses.
 
-## Related Rules
+## Original rule
 
-* [array-bracket-spacing](array-bracket-spacing.md)
-* [object-curly-spacing](object-curly-spacing.md)
-* [computed-property-spacing](computed-property-spacing.md)
+This rule is based on the `space-in-parens` rule in the ESLint package. See the original documentation here:
+* https://eslint.org/docs/rules/space-in-parens
+* https://github.com/eslint/eslint/blob/main/docs/src/rules/space-in-parens.md

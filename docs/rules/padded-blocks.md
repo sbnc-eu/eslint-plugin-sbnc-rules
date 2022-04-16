@@ -31,6 +31,7 @@ String option:
 
 * `"always"` (default) requires empty lines at the beginning and ending of block statements, function bodies, class static blocks, classes, and `switch` statements.
 * `"never"` disallows empty lines at the beginning and ending of block statements, function bodies, class static blocks, classes, and `switch` statements.
+* `"loose"` applies the `always` rule if there is at least one empty (padding) line inside the block's body, and applies the `never` rule otherwise. Note that if the block contains other blocks, the empty lines in those blocks' bodies are not considered, only those for each block's own block level.
 
 Object option:
 
@@ -41,6 +42,7 @@ Object option:
 ### Second option
 
 * `"allowSingleLineBlocks": true` allows single-line blocks
+* `"noBottomPadding": true` prevents padding to be added to the bottom of blocks
 
 ### always
 
@@ -173,6 +175,137 @@ class C {
     static {
         a();
     }
+}
+```
+
+### loose
+
+Examples of **incorrect** code for this rule with the `"loose"` option:
+
+```js
+/*eslint padded-blocks: ["error", "loose"]*/
+
+if (a) {
+  b();
+  
+  c();
+}
+
+if (a) {
+  
+    b();
+    
+}
+
+if (a) { b(); 
+  
+  c(); }
+
+if (a)
+{
+  
+    b();
+    
+}
+
+if (a)
+{
+  b();
+
+  c();
+}
+
+if (a) {
+    b();
+
+}
+
+if (a) {
+    // comment
+    b();
+
+}
+
+class C {
+
+  static {
+
+    a();
+
+  }
+
+}
+
+class C {
+  static {
+    a();
+    b();
+  }
+}
+
+class C {
+  
+  static {
+    a();
+    
+    b();
+  }
+  
+}
+```
+
+Examples of **correct** code for this rule with the `"loose"` option:
+
+```js
+/*eslint padded-blocks: ["error", "loose"]*/
+
+if (a) {
+  
+  b();
+
+  c();
+  
+}
+
+if (a) {
+    b();
+}
+
+if (a) { b(); }
+
+if (a)
+{
+    b();
+}
+
+if (a)
+{
+  
+  b();
+
+  c();
+  
+}
+
+if (a) {
+    // comment
+    b();
+}
+
+class C {
+  static {
+    a();
+  }
+}
+
+class C {
+  static {
+    
+    a();
+    
+    b();
+    
+  }
 }
 ```
 
@@ -472,11 +605,46 @@ if (a) {
 }
 ```
 
+### always + noBottomPadding
+
+Examples of **incorrect** code for this rule with the `"always", {"noBottomPadding": true}` options:
+
+```js
+/*eslint padded-blocks: ["error", "always", { noBottomPadding: true }]*/
+
+if (a) {
+    b();
+}
+
+if (a) {
+
+    b();
+    
+}
+
+if (a) {
+    b();
+
+}
+```
+
+Examples of **correct** code for this rule with the `"always", {"noBottomPadding": true}` options:
+
+```js
+/*eslint padded-blocks: ["error", "always", { noBottomPadding: true }]*/
+
+if (a) {
+
+    b();
+}
+```
+
 ## When Not To Use It
 
 You can turn this rule off if you are not concerned with the consistency of padding within blocks.
 
-## Related Rules
+## Original rule
 
-* [lines-between-class-members](lines-between-class-members.md)
-* [padding-line-between-statements](padding-line-between-statements.md)
+This rule is based on the `padded-blocks` rule in the ESLint package. See the original documentation here:
+ * https://eslint.org/docs/rules/padded-blocks
+ * https://github.com/eslint/eslint/blob/main/docs/src/rules/padded-blocks.md
