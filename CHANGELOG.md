@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-04-17
 ### Added
-- `space-in-parens` rule now can handle Objects as well using the `"includeObjects": true` option.
+- `padded-blocks` rule now can handle Objects as well using the `"includeObjects": true` option.
+
+### Fixed
+- `padded-blocks` rule detection of padding lines incorrectly detected a block to include paddings if an object inside the block contained paddings, but the block itself did not
 
 ## [0.1.0] - 2022-04-17
 ### Added
