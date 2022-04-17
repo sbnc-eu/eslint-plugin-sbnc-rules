@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 const rule = require("../../../lib/rules/padded-blocks"),
-    { RuleTester } = require("../../../lib/rule-tester");
+      RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests

@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 const rule = require("../../../lib/rules/space-in-parens"),
-    { RuleTester } = require("../../../lib/rule-tester");
+      RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests
