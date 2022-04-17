@@ -421,6 +421,12 @@ foo({
 
        });
 
+foo({
+      bar: 'baz' } );
+
+foo( { bar: 'baz'
+});
+
 foo( { bar: 'baz',
        qux: 'quux',
        corge: 'grault' } );
