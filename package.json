@@ -2,12 +2,25 @@
   "name": "eslint-plugin-sbnc-rules",
   "version": "0.1.0",
   "description": "An ESLint plugin for customised linting rules",
+  "homepage": "https://github.com/BenceSzalai/eslint-plugin-sbnc-rules#readme",
   "keywords": [
     "eslint",
     "eslintplugin",
-    "eslint-plugin"
+    "eslint-plugin",
+    "eslint-rules"
   ],
-  "author": "Bence Szalai <https://sbnc.eu>",
+  "author": {
+    "name": "Bence Szalai",
+    "email": "bence@sbnc.eu",
+    "url": "https://sbnc.eu/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenceSzalai/eslint-plugin-sbnc-rules.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BenceSzalai/eslint-plugin-sbnc-rules/issues"
+  },
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint .",
