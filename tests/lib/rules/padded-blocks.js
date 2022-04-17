@@ -339,6 +339,11 @@ ruleTester.run("padded-blocks", rule, {
     { code: "a = foo({\n  bar: 'baz',\n  qux: 'quux',\n})", options: ["loose", { includeObjects: true }] },
     { code: "a = foo({\n\n  bar: 'baz',\n\n  qux: 'quux',\n\n})", options: ["loose", { includeObjects: true }] },
     { code: "a = foo({\n  bar: 'baz',\n  qux: {\n\n    corge: 'grault',\n\n    garply: 'waldo',\n\n},\n})", options: ["loose", { includeObjects: true }] },
+    {
+      code: "a = foo({\n  bar: 'baz',\n  ...qux,\n})",
+      options: ["loose", { includeObjects: true }],
+      parserOptions: { ecmaVersion: 2022 }
+    },
   ],
   invalid: [
     {
