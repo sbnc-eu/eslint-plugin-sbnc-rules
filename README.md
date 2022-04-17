@@ -73,7 +73,8 @@ This rule provides extra options to control when padding lines in curly brace co
 The first option has a new value `loose`. This means to only apply padding around the brackets if there is at least one empty (padding) line inside the block's body.
 
 The second option allows a new setting:
-* `noBottomPadding` which can be used to avoid padding the bottom of blocks regardless of the first option's value. 
+* `noBottomPadding` which can be used to avoid padding the bottom of blocks regardless of the first option's value
+* `includeObjects` which can be used to extend the padding behaviour to Objects
 
 ## Additional info
 
