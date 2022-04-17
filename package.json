@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-sbnc-rules",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An ESLint plugin for customised linting rules",
   "homepage": "https://github.com/BenceSzalai/eslint-plugin-sbnc-rules#readme",
   "keywords": [
