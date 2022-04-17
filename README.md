@@ -48,7 +48,9 @@ Then configure the rules you want to use under the rules section. Since these ru
 
 This Plugin contains two rules. Each of these are an extended versions of the rules under the same name provided with ESLint. These rules should behave exactly the same as their original counterparts if the rule configuration is the same. However, they allow some additional configuration options to further fine-tune their behaviour.
 
-For detailed information and examples about the rules refer to their respective documentation under the `docs/rules` folder.
+For detailed information and examples about the rules refer to their respective documentation under the `docs/rules` folder:
+* [docs/rules/space-in-parens.md](https://github.com/BenceSzalai/eslint-plugin-sbnc-rules/blob/main/docs/rules/space-in-parens.md)
+* [docs/rules/padded-blocks.md](https://github.com/BenceSzalai/eslint-plugin-sbnc-rules/blob/main/docs/rules/padded-blocks.md)
 
 ### space-in-parens
 
