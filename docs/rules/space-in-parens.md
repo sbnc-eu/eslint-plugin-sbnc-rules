@@ -24,7 +24,7 @@ There are two options for this rule:
 
 * `"never"` (default) enforces zero spaces inside of parentheses
 * `"always"` enforces a space inside of parentheses
-* `"loose"` applies the `always` rule if there is at least one space or any other parentheses inside the parentheses, and applies the `never` rule otherwise.
+* `"loose"` applies the `always` rule if there is at least one space or any other parentheses inside the parentheses, and applies the `never` rule otherwise
 
 Depending on your coding conventions, you can choose either option by specifying it in your configuration:
 
@@ -168,8 +168,8 @@ Empty parens exception and behavior:
 ### Bracket Lines and Bracket Sides Exceptions
 
 These exceptions deal with parts of the code where a chunk of code only contains brackets.
-* `bracket lines` defines an exception to any lines that only contain brackets
-* `bracket sides` defines an exception to the opening or closing parentheses if they only contain brackets within the same line of code.
+* `bracket lines` defines an exception for parenthesis in lines that only contain brackets and whitespaces (on either side of the subject parenthesis)
+* `bracket sides` defines an exception for parenthesis when the inner side of the bracket only contain other brackets and whitespaces within the same line
 
 
 ### Examples
@@ -346,13 +346,19 @@ Example of **incorrect** code for this rule with the `"always", { "exceptions": 
 ```js
 /*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket lines"] }]*/
 
-foo({
+// The closing parenthesis is in a line that only contain brackets, so it is an exception from the `always` rule.
+foo( {
   
 } );
 
-foo( {
+// The opening parenthesis is in a line that contain the `foo` word, so it is NOT an exception from the `always` rule.
+foo({
 
-} );
+});
+
+// The closing parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
+foo({
+      bar: 'baz' } );
 ```
 
 Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket lines"] }]` option:
@@ -363,6 +369,14 @@ Example of **correct** code for this rule with the `"always", { "exceptions": ["
 foo( {
 
 });
+
+foo( {
+
+        });
+
+foo( { bar: 'baz',
+       qux: 'quux',
+       corge: 'grault' } );
 ```
 
 
@@ -371,9 +385,27 @@ Example of **incorrect** code for this rule with the `"always", { "exceptions": 
 ```js
 /*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket sides"] }]*/
 
+// The closing parenthesis only contain brackets in the same line, so it is an exception from the `always` rule.
+foo({
+
+} );
+
+// The opening parenthesis only contain brackets in the same line, so it is an exception from the `always` rule.
+foo( {
+
+});
+
 foo( {
   
 } );
+
+// The closing parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
+foo({
+      bar: 'baz' });
+
+// The opening parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
+foo({ bar: 'baz'
+});
 ```
 
 Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket sides"] }]` option:
@@ -384,6 +416,14 @@ Example of **correct** code for this rule with the `"always", { "exceptions": ["
 foo({
 
 });
+
+foo({
+
+       });
+
+foo( { bar: 'baz',
+       qux: 'quux',
+       corge: 'grault' } );
 ```
 
 ## When Not To Use It

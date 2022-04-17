@@ -59,8 +59,8 @@ This rule provides extra options to control when spaces in parens should be used
 The first option has a new value `loose`. This means to only apply spaces around the brackets if there is more than one item in the bracket separated by space(s).
 
 The second option allows new exceptions:
- * `bracket lines` which turns around the rule selected in the first option for brackets in lines that only contain brackets.
- * `bracket sides` which turns around the rule selected in the first option for brackets where the inside of the bracket only contain other brackets within the same line.
+ * `bracket lines` which turns around the rule selected in the first option for parenthesis in lines that only contain brackets and whitespaces (on either side of the subject parenthesis)
+ * `bracket sides` which turns around the rule selected in the first option for parenthesis when the inner side of the bracket only contain other brackets and whitespaces within the same line
 
 ### padded-blocks
 
