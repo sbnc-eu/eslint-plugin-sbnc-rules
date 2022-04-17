@@ -36,10 +36,14 @@ Then configure the rules you want to use under the rules section. Since these ru
 ```json
 {
     "rules": {
+      
       "space-in-parens"           : "off",
-      "padded-blocks"             : "off",
       "sbnc-rules/space-in-parens": [ "error", "loose", { "exceptions": ["bracket sides"] } ],
-      "sbnc-rules/padded-blocks"  : [ "error", "loose", { "allowSingleLineBlocks": true, "noBottomPadding": true } ]
+      
+      "padded-blocks"             : "off",
+      "object-curly-newline"      : "off",
+      "sbnc-rules/padded-blocks"  : [ "error", "loose", { "allowSingleLineBlocks": true, "noBottomPadding": true, "includeObjects": true } ]
+      
     }
 }
 ```

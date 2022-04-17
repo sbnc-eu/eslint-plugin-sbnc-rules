@@ -320,7 +320,23 @@ ruleTester.run("padded-blocks", rule, {
     { code: "if (a)\n{\n  \n  b();\n\n  c();\n  \n}", options: [{ blocks: "loose" }] },
     { code: "if (a) {\n    // comment\n    b();\n}", options: [{ blocks: "loose" }] },
     { code: "class C {\n  static {\n    a();\n  }\n}", options: [{ blocks: "loose" }], parserOptions: { ecmaVersion: 2022 } },
-    { code: "class C {\n  static {\n    \n    a();\n    \n    b();\n    \n  }\n}", options: [{ blocks: "loose" }], parserOptions: { ecmaVersion: 2022 } }
+    { code: "class C {\n  static {\n    \n    a();\n    \n    b();\n    \n  }\n}", options: [{ blocks: "loose" }], parserOptions: { ecmaVersion: 2022 } },
+
+    // Object literals
+    // By default it should not care about objects
+    "a = foo({\n  bar: 'baz',\n  qux: 'quux',\n})",
+    "a = foo({\n\n  bar: 'baz',\n  qux: 'quux',\n\n})",
+    { code: "a = foo({\n  bar: 'baz',\n  qux: 'quux',\n})", options: ["never"] },
+    { code: "a = foo({\n\n  bar: 'baz',\n  qux: 'quux',\n\n})", options: ["never"] },
+    { code: "a = foo({\n  bar: 'baz',\n  qux: 'quux',\n})", options: ["loose"] },
+    { code: "a = foo({\n\n  bar: 'baz',\n  qux: 'quux',\n\n})", options: ["loose"] },
+    { code: "a = foo({\n  bar: 'baz',\n\n  qux: 'quux',\n})", options: ["loose"] },
+    { code: "a = foo({\n\n  bar: 'baz',\n\n  qux: 'quux',\n\n})", options: ["loose"] },
+
+    { code: "a = foo({\n  bar: 'baz',\n  qux: 'quux',\n})", options: ["never", { includeObjects: true }] },
+    { code: "a = foo({\n  bar: 'baz',\n  qux: 'quux',\n})", options: ["never", { includeObjects: true }] },
+    { code: "a = foo({\n  bar: 'baz',\n  qux: 'quux',\n})", options: ["loose", { includeObjects: true }] },
+    { code: "a = foo({\n\n  bar: 'baz',\n\n  qux: 'quux',\n\n})", options: ["loose", { includeObjects: true }] },
 
   ],
   invalid: [

@@ -43,6 +43,7 @@ Object option:
 
 * `"allowSingleLineBlocks": true` allows single-line blocks
 * `"noBottomPadding": true` prevents padding to be added to the bottom of blocks
+* `"includeObjects": true` extends the scope of the rule to Objects (i.e.: ObjectPattern, ObjectExpression) - The original `padded-blocks` rule does not consider Object literals, however from styling perspective those may need the same handling as other `{...}` parts, so this option extends the check to cover those. Note that you may need to turn off or configure the `object-curly-newline` rule to avoid conflicts with this one.
 
 ### always
 
