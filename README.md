@@ -2,7 +2,7 @@
 
 This plugin includes some specialised ESLint rules.
 
-The current version of the rules are based on the [v8.13.0](https://github.com/eslint/eslint/releases/tag/v8.13.0) varsion of ESLint and are tested to be compatible with ESLint v7 and v8.
+The current version of the rules are based on the [v8.13.0](https://github.com/eslint/eslint/releases/tag/v8.13.0) version of ESLint and are tested to be compatible with ESLint v7 and v8.
 
 ## Installation
 
@@ -38,7 +38,7 @@ Then configure the rules you want to use under the rules section. Since these ru
     "rules": {
       
       "space-in-parens"           : "off",
-      "sbnc-rules/space-in-parens": [ "error", "loose", { "exceptions": ["bracket sides"] } ],
+      "sbnc-rules/space-in-parens": [ "error", "loose", { "exceptions": ["bracket unclosed"] } ],
       
       "padded-blocks"             : "off",
       "object-curly-newline"      : "off",
@@ -83,3 +83,5 @@ The plugin scaffolding has been generated using [yo](https://www.npmjs.com/packa
 ***
 
 Bence Szalai - https://sbnc.eu/
+
+For similar extended rules of the typescript-eslint rules check out my other plugin: [eslint-plugin-sbnc-typescript-rules](https://github.com/BenceSzalai/eslint-plugin-sbnc-typescript-rules).

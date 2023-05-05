@@ -72,6 +72,24 @@ ruleTester.run("space-in-parens", rule, {
     { code: "var foo = `( bar ${baz} )`;", options: ["never"], parserOptions: { ecmaVersion: 6 } },
     { code: "var foo = `( bar ${baz} )`;", options: ["loose"], parserOptions: { ecmaVersion: 6 } },
     { code: "var foo = `(bar ${(1 + 2)})`;", options: ["never"], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ({})", options: ["never"], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ({})", options: ["loose"], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ( {} )", options: ["always"], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ({})", options: ["never", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ({})", options: ["loose", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ( {} )", options: ["always", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+
+    { code: "const x = () => ( {}\n)", options: ["never", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ( {}\n)", options: ["loose", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ({}\n)", options: ["always", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+
+    { code: "const x = () => (\n{} )", options: ["never", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => (\n{} )", options: ["loose", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => (\n{})", options: ["always", { exceptions: ['bracket unclosed'] }], parserOptions: { ecmaVersion: 6 } },
+
+    { code: "const x = () => ( {} )", options: ["never", { exceptions: ['bracket within'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ( {} )", options: ["loose", { exceptions: ['bracket within'] }], parserOptions: { ecmaVersion: 6 } },
+    { code: "const x = () => ({})", options: ["always", { exceptions: ['bracket within'] }], parserOptions: { ecmaVersion: 6 } },
 
     // comments
     { code: "foo( /* bar */ )", options: ["always"] },
@@ -105,9 +123,13 @@ ruleTester.run("space-in-parens", rule, {
     { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["always", { exceptions: ["{}"] }] },
     { code: "foo( {\nbar: 'baz',\nbaz: 'bar'\n})", options: ["always", { exceptions: ["bracket lines"] }] },
     { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["always", { exceptions: ["bracket sides"] }] },
+    { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["always", { exceptions: ["bracket unclosed"] }] },
+    { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["always", { exceptions: ["bracket within"] }] },
     { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["loose", { exceptions: ["{}"] }] },
     { code: "foo( {\nbar: 'baz',\nbaz: 'bar'\n})", options: ["loose", { exceptions: ["bracket lines"] }] },
     { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["loose", { exceptions: ["bracket sides"] }] },
+    { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["loose", { exceptions: ["bracket unclosed"] }] },
+    { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n})", options: ["loose", { exceptions: ["bracket within"] }] },
     { code: "foo({ bar: 'baz' })", options: ["never", { exceptions: ["[]", "()"] }] },
     { code: "foo( { bar: 'baz' } )", options: ["never", { exceptions: ["{}"] }] },
     { code: "foo(1, { bar: 'baz' } )", options: ["never", { exceptions: ["{}"] }] },
@@ -115,6 +137,8 @@ ruleTester.run("space-in-parens", rule, {
     { code: "foo( {\nbar: 'baz',\nbaz: 'bar'\n} )", options: ["never", { exceptions: ["{}"] }] },
     { code: "foo({\nbar: 'baz',\nbaz: 'bar'\n} )", options: ["never", { exceptions: ["bracket lines"] }] },
     { code: "foo( {\nbar: 'baz',\nbaz: 'bar'\n} )", options: ["never", { exceptions: ["bracket sides"] }] },
+    { code: "foo( {\nbar: 'baz',\nbaz: 'bar'\n} )", options: ["never", { exceptions: ["bracket unclosed"] }] },
+    { code: "foo( {\nbar: 'baz',\nbaz: 'bar'\n} )", options: ["never", { exceptions: ["bracket within"] }] },
 
     { code: "foo([ 1, 2 ])", options: ["always", { exceptions: ["[]"] }] },
     { code: "foo([ 1, 2 ])", options: ["loose", { exceptions: ["[]"] }] },
@@ -197,23 +221,44 @@ ruleTester.run("space-in-parens", rule, {
     // Bracket line specific
     { code: "foo ( bar, {\n baz: 'quux'\n })", options: ["always", { exceptions: ["bracket lines"] }] },
     { code: "foo ( bar, {\n baz: 'quux'\n }\n)", options: ["always", { exceptions: ["bracket lines"] }] },
+
     { code: "const qux = {\nfoo ( { bar, baz } ) {\n}\n}",
       options: ["loose", { exceptions: ["bracket lines"] }],
       parserOptions: { ecmaVersion: 2022 } },
     { code: "const qux = {\nfoo ( { bar, baz } ) {\n}\n}",
       options: ["loose", { exceptions: ["bracket sides"] }],
       parserOptions: { ecmaVersion: 2022 } },
+    { code: "const qux = {\nfoo ( { bar, baz } ) {\n}\n}",
+      options: ["loose", { exceptions: ["bracket unclosed"] }],
+      parserOptions: { ecmaVersion: 2022 } },
+    { code: "const qux = {\nfoo ( { bar, baz } ) {\n}\n}",
+      options: ["loose", { exceptions: ["bracket within"] }],
+      parserOptions: { ecmaVersion: 2022 } },
+
     { code: "const qux = {\nfoo (bar) {\n}\n}",
       options: ["loose", { exceptions: ["bracket lines"] }],
       parserOptions: { ecmaVersion: 2022 } },
     { code: "const qux = {\nfoo (bar) {\n}\n}",
       options: ["loose", { exceptions: ["bracket sides"] }],
       parserOptions: { ecmaVersion: 2022 } },
+    { code: "const qux = {\nfoo (bar) {\n}\n}",
+      options: ["loose", { exceptions: ["bracket unclosed"] }],
+      parserOptions: { ecmaVersion: 2022 } },
+    { code: "const qux = {\nfoo (bar) {\n}\n}",
+      options: ["loose", { exceptions: ["bracket within"] }],
+      parserOptions: { ecmaVersion: 2022 } },
+
     { code: "const qux = {\nfoo ( bar, qux ) {\n}\n}",
       options: ["loose", { exceptions: ["bracket lines"] }],
       parserOptions: { ecmaVersion: 2022 } },
     { code: "const qux = {\nfoo ( bar, qux ) {\n}\n}",
       options: ["loose", { exceptions: ["bracket sides"] }],
+      parserOptions: { ecmaVersion: 2022 } },
+    { code: "const qux = {\nfoo ( bar, qux ) {\n}\n}",
+      options: ["loose", { exceptions: ["bracket unclosed"] }],
+      parserOptions: { ecmaVersion: 2022 } },
+    { code: "const qux = {\nfoo ( bar, qux ) {\n}\n}",
+      options: ["loose", { exceptions: ["bracket within"] }],
       parserOptions: { ecmaVersion: 2022 } },
   ],
 
@@ -368,6 +413,36 @@ ruleTester.run("space-in-parens", rule, {
       errors: [
         { messageId: "missingOpeningSpace", line: 1, column: 4, endColumn: 5 },
         { messageId: "missingClosingSpace", line: 1, column: 14, endColumn: 15 }
+      ]
+    },
+    {
+      code: "const x = () => ( {} )",
+      output: "const x = () => ({})",
+      options: ["never"],
+      parserOptions: { ecmaVersion: 6 },
+      errors: [
+        { messageId: "rejectedOpeningSpace", line: 1, column: 18, endColumn: 19 },
+        { messageId: "rejectedClosingSpace", line: 1, column: 21, endColumn: 22 }
+      ]
+    },
+    {
+      code: "const x = () => ( {} )",
+      output: "const x = () => ({})",
+      options: ["loose"],
+      parserOptions: { ecmaVersion: 6 },
+      errors: [
+        { messageId: "rejectedOpeningSpace", line: 1, column: 18, endColumn: 19 },
+        { messageId: "rejectedClosingSpace", line: 1, column: 21, endColumn: 22 }
+      ]
+    },
+    {
+      code: "const x = () => ({})",
+      output: "const x = () => ( {} )",
+      options: ["always"],
+      parserOptions: { ecmaVersion: 6 },
+      errors: [
+        { messageId: "missingOpeningSpace", line: 1, column: 17, endColumn: 18 },
+        { messageId: "missingClosingSpace", line: 1, column: 20, endColumn: 21 }
       ]
     },
 

@@ -151,9 +151,9 @@ var foo = ( 1 + ( 2 * 5 ) ) * 3;
 
 An object literal may be used as a third array item to specify exceptions, with the key `"exceptions"` and an array as the value. These exceptions work in the context of the first option. That is, if `"always"` is set to enforce spacing, then any "exception" will *disallow* spacing. Conversely, if `"never"` is set to disallow spacing, then any "exception" will *enforce* spacing.
 
-Note that this rule only enforces spacing within parentheses; it does not check spacing within curly or square brackets, but will enforce or disallow spacing of those brackets if and only if they are adjacent to an opening or closing parenthesis.
+Note that this rule only enforces spacing within parentheses; it does not check spacing within curly braces or square brackets, but will enforce or disallow spacing of those brackets if and only if they are adjacent to an opening or closing parenthesis.
 
-The following exceptions are available: `["{}", "[]", "()", "empty", "bracket lines", "bracket sides"]`.
+The following exceptions are available: `["{}", "[]", "()", "empty", "bracket lines", "bracket sides", "bracket unclosed", "bracket within"]`.
 
 ### Empty Exception
 
@@ -161,16 +161,17 @@ Empty parens exception and behavior:
 
 * `always` allows for both `()` and `( )`
 * `never` (default) requires `()`
-* `always` excepting `empty` requires `()`
-* `never` excepting `empty` requires `( )` (empty parens without a space is here forbidden)
+* `always` except for `empty` requires `()`
+* `never` except for `empty` requires `( )` (empty parens without a space is forbidden)
 
 
-### Bracket Lines and Bracket Sides Exceptions
+### Bracket Exceptions
 
-These exceptions deal with parts of the code where a chunk of code only contains brackets.
+These exceptions deal with parts where a chunk of code only contains brackets. In this context we use "brackets" as a general term for parenthesis, curly braces and square brackets.
 * `bracket lines` defines an exception for parenthesis in lines that only contain brackets and whitespaces (on either side of the subject parenthesis)
-* `bracket sides` defines an exception for parenthesis when the inner side of the bracket only contain other brackets and whitespaces within the same line
-
+* `bracket sides` (*deprecated*) defines an exception for parenthesis when the inner side of the bracket only contain other brackets and whitespaces within the same line - note that the inner side continues after the closing pair of the parenthesis until the end of the line
+* `bracket unclosed` defines an exception for parenthesis when the inner side of the bracket only contain other brackets and whitespaces and the closing pair of the parenthesis is on another line
+* `bracket within` defines an exception for parenthesis when inside the bracket only contain other brackets and whitespaces within the same line - note that the inside ends where the closing parenthesis is found or where the line ends
 
 ### Examples
 
@@ -340,6 +341,7 @@ baz( 1, [1,2]);
 foo({bar: 'baz'}, [1, 2]);
 ```
 
+#### Bracket lines
 
 Example of **incorrect** code for this rule with the `"always", { "exceptions": ["bracket lines"] }]` option:
 
@@ -359,6 +361,11 @@ foo({
 // The closing parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
 foo({
       bar: 'baz' } );
+
+// No exception applies to this line:
+const foo = () => ({});
+const foo = () => ( {});
+const foo = () => ({} );
 ```
 
 Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket lines"] }]` option:
@@ -377,8 +384,11 @@ foo( {
 foo( { bar: 'baz',
        qux: 'quux',
        corge: 'grault' } );
+
+const foo = () => ( {} );
 ```
 
+#### Bracket sides
 
 Example of **incorrect** code for this rule with the `"always", { "exceptions": ["bracket sides"] }]` option:
 
@@ -406,6 +416,11 @@ foo({
 // The opening parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
 foo({ bar: 'baz'
 });
+
+// Exception apply to the `(` (the one after `=>`), but not to the corresponding `)`:
+const foo = () => ({});
+const foo = () => ( {});
+const foo = () => ( {} );
 ```
 
 Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket sides"] }]` option:
@@ -430,7 +445,152 @@ foo( { bar: 'baz'
 foo( { bar: 'baz',
        qux: 'quux',
        corge: 'grault' } );
+
+const foo = () => ({} );
 ```
+
+Note: `bracket sides` is a legacy configuration, and can lead to unexpected results. It is recommended to switch to `bracket unclosed` or `bracket within` instead. Consider that `bracket sides` can lead to strange behaviour, such as the following code:
+```js
+const foo = () => ({})
+```
+being "corrected" to:
+```js
+const foo = () => ( {})
+```
+or to:
+```js
+const foo = () => ({} )
+```
+
+This is because on the right side of the 2nd `(` there are only brackets, so it becomes an exception, however on the left side of the corresponding `)` there is the whole line of code including `const foo = () => `, so it is not an exception.
+
+Using the `bracket unclosed` exception solves the issue by not applying the exception to any of the sides, because both `(` and `)` is on the same line, so it is not an "unclosed" bracket.
+
+Using the `bracket within` exception also solves the asymmetry, because it only examines the code inside the parentheses, so the part before the opening `(` is not considered when examining the closing `)` (and vice-versa).
+
+
+#### Bracket unclosed
+
+Example of **incorrect** code for this rule with the `"always", { "exceptions": ["bracket unclosed"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket sides"] }]*/
+
+// The closing parenthesis only contain brackets in the same line, so it is an exception from the `always` rule.
+foo({
+
+} );
+
+// The opening parenthesis only contain brackets in the same line, so it is an exception from the `always` rule.
+foo( {
+
+});
+
+foo( {
+  
+} );
+
+// The closing parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
+foo({
+      bar: 'baz' });
+
+// The opening parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
+foo({ bar: 'baz'
+});
+
+// Exception does not apply, because the parentheses are closed on the same line.
+const foo = () => ({});
+const foo = () => ( {});
+const foo = () => ({} );
+```
+
+Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket unclosed"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket sides"] }]*/
+
+foo({
+
+});
+
+foo({
+
+       });
+
+foo({
+      bar: 'baz' } );
+
+foo( { bar: 'baz'
+});
+
+foo( { bar: 'baz',
+       qux: 'quux',
+       corge: 'grault' } );
+
+const foo = () => ( {} );
+```
+
+#### Bracket within
+
+Example of **incorrect** code for this rule with the `"always", { "exceptions": ["bracket within"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket sides"] }]*/
+
+// The closing parenthesis only contain brackets in the same line, so it is an exception from the `always` rule.
+foo({
+
+} );
+
+// The opening parenthesis only contain brackets in the same line, so it is an exception from the `always` rule.
+foo( {
+
+});
+
+foo( {
+  
+} );
+
+// The closing parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
+foo({
+      bar: 'baz' });
+
+// The opening parenthesis contains words in the same line, so it is NOT an exception from the `always` rule.
+foo({ bar: 'baz'
+});
+
+// Exception does not apply, because there are only brackets within the parentheses.
+const foo = () => ( {} );
+const foo = () => ( {});
+const foo = () => ({} );
+```
+
+Example of **correct** code for this rule with the `"always", { "exceptions": ["bracket within"] }]` option:
+
+```js
+/*eslint space-in-parens: ["error", "always", { "exceptions": ["bracket sides"] }]*/
+
+foo({
+
+});
+
+foo({
+
+       });
+
+foo({
+      bar: 'baz' } );
+
+foo( { bar: 'baz'
+});
+
+foo( { bar: 'baz',
+       qux: 'quux',
+       corge: 'grault' } );
+
+const foo = () => ({});
+```
+
 
 ## When Not To Use It
 
