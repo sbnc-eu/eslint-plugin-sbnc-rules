@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-sbnc-rules",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An ESLint plugin for customised linting rules",
   "homepage": "https://github.com/BenceSzalai/eslint-plugin-sbnc-rules#readme",
   "keywords": [
@@ -34,15 +34,15 @@
   },
   "devDependencies": {
     "eslint": "^8.0.1",
-    "eslint-plugin-eslint-plugin": "^4.0.1",
+    "eslint-plugin-eslint-plugin": "^4.0.1 || ^5.0.0",
     "eslint-plugin-node": "^11.1.0",
-    "mocha": "^9.1.3"
+    "mocha": "^10.2.0"
   },
   "engines": {
-    "node": "12.x || 14.x || >= 16"
+    "node": ">=16"
   },
   "peerDependencies": {
-    "eslint": ">=6"
+    "eslint": ">=8"
   },
   "license": "MIT"
 }
